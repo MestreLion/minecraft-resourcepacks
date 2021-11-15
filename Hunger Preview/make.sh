@@ -38,7 +38,7 @@ source="$mcpath"/src/world/food/Foods.java
 # - Saturation restored is actually 2 * nutrition * saturationMod
 export LC_ALL=C  # Force '.' as decimal separator
 stewmod=0.6  # should parse this!
-re_effect='\WMobEffects\.([A-Z]+)'
+re_effect='\WMobEffects\.([A-Z]+) *, *(\d+) *, *(\d+) *\) *, *([\d.]+)F'
 regex='/FoodProperties +([A-Z_]+) *='\
 '(?: *stew\((\d+)\))?'\
 '(?:.*\.nutrition\((\d+)\))?'\
@@ -47,11 +47,26 @@ regex='/FoodProperties +([A-Z_]+) *='\
 '/'
 parse_food() {
 	local source=$1
-	local food nutrition satmod effects saturation
+	local food nutrition satmod effects saturation effects elist
 	while read -r food nutrition satmod effects; do
 		saturation=$(perl -E "say 2 * ${nutrition} * ${satmod:-$stewmod}")
-		printf '%-20s\t%2d\t%#4.1f\t%s\n' "${food,,}" "$nutrition" "$saturation" "$effects"
-	done < <(perl -ne "$regex"' && do {print "$1\t$2\t$3\t$4";
-			@e = $5=~/'"$re_effect"'/g; print"\t@e\n"}' -- "$source")
+		elist=$(parse_effects $effects)  # intentionally unquoted
+		printf '%-20s\t%2d\t%#4.1f\t%s\n' "${food,,}" "$nutrition" "$saturation" "$elist"
+	done < <(perl -nE "$regex"' && do {print "$1\t$2\t$3\t$4\t"; $e = $5;
+			while ($e =~ /'"$re_effect"'/g) {print "$1|$2|$3|$4 "}
+			print "\n"}' -- "$source")
+}
+parse_effects() {
+	local effects=("$@")
+	local effect ticks level odds etitle perc secs
+	for effect in "${effects[@]}"; do
+		while IFS='|' read -r effect ticks level odds; do
+			level=$((level + 1))
+			etitle="${effect,,} ${level}"
+			perc=$(perl -E "say 100 * ${odds}")
+			secs=$((ticks/20))
+			printf "%3d%% %3ds %s\t" "$perc" "$secs" "$etitle"
+		done <<< "${effect}"
+	done
 }
 parse_food "$source"
