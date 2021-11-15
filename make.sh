@@ -9,6 +9,7 @@
 version=${1:-1.17.1}
 prefix=ML  # From MestreLion
 vanilla=vanilla  # vanilla assets dir
+outdir=..  # relative to this
 
 #------------------------------------------------------------------------------
 
@@ -37,6 +38,7 @@ make_pack() (
 	local version=$2
 	local prefix=$3
 	local name="${prefix} ${pack##*/} ${version}"
+	local zipfile="$mydir"/"$name".zip
 	local format=$(format_from_version "$version")
 	echo "Packing $name"
 	cd "$pack"
@@ -44,7 +46,11 @@ make_pack() (
 	sed -Ei '/pack_format/s/:[ \t]*[0-9]*[ \t]*(,?)[ \t]*$/: '"$format"'\1/' pack.mcmeta
 	# Compress icon
 	pngcrush -q -blacken -rem alla -ow -force pack.png
-	zip -qr "$mydir"/../"$name".zip *
+	rm -f -- "$zipfile"
+	zip -qr "$zipfile" -- *
+	if [[ "$outdir" && -d "$outdir" ]]; then
+		cp -- "$zipfile" "$mydir"/"$outdir"
+	fi
 )
 
 #------------------------------------------------------------------------------
