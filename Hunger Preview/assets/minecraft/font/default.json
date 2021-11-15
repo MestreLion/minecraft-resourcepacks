@@ -1,0 +1,76 @@
+{
+    "providers": [
+        {
+            "type": "bitmap",
+            "file": "minecraft:font/hunger-full.png",
+            "ascent": 8,
+            "height": 8,
+            "chars": [
+                "①"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:font/hunger-half.png",
+            "ascent": 8,
+            "height": 8,
+            "chars": [
+                "②"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:font/saturation-full.png",
+            "ascent": 8,
+            "height": 8,
+            "chars": [
+                "③"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:font/saturation-half.png",
+            "ascent": 8,
+            "height": 8,
+            "chars": [
+                "④"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:font/hunger-saturation-full.png",
+            "ascent": 8,
+            "height": 8,
+            "chars": [
+                "⑤"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:font/hunger-saturation-half.png",
+            "ascent": 8,
+            "height": 8,
+            "chars": [
+                "⑥"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:font/hunger-full-saturation-half.png",
+            "ascent": 8,
+            "height": 8,
+            "chars": [
+                "⑦"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:font/saturation-full-hunger-half.png",
+            "ascent": 8,
+            "height": 8,
+            "chars": [
+                "⑧"
+            ]
+        }
+    ]
+}
